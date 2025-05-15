@@ -3,6 +3,7 @@ package main.natationtn.Controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import main.natationtn.Entities.CalendarResponse;
+import main.natationtn.Entities.Clubs;
 import main.natationtn.Services.ScrapingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class ScrappingController {
             description = "Scrapes and returns the list of swimming clubs from the official FTN website"
     )
     @GetMapping("/clubs")
-    public List<String> getClubs() throws IOException {
+    public List<Clubs> getClubs() throws IOException {
         return scrapingService.getClubs();
     }
     @Operation(
