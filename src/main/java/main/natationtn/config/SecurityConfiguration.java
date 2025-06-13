@@ -37,7 +37,9 @@ public class SecurityConfiguration {
                                 "/v3/api-docs/**",
                                 "/api/scrape-events",
                                 "/api/scrape-all",
-                                "/api/scrape-blogs"
+                                "/api/scrape-blogs",
+                                "/api/athletes/**",
+                                "/api/clubs/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
