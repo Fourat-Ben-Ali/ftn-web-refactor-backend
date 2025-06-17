@@ -1,6 +1,7 @@
 package main.natationtn.Services;
 
 import main.natationtn.Entities.CalendarResponse;
+import main.natationtn.Entities.Clubs;
 import main.natationtn.Entities.CompetitionEvent;
 import main.natationtn.Entities.QualificationRule;
 import org.springframework.stereotype.Service;
@@ -22,28 +23,44 @@ import org.springframework.web.client.RestTemplate;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+
 @Service
 public class ScrapingService {
 
     private static final String URL_CLUBS = "http://ftnatation.tn/licences-2021-2022/";
     private final String PDF_URL = "http://ftnatation.tn/wp-content/uploads/2025/04/calendrier-international-2025_removed.pdf";
 
-    public List<String> getClubs() throws IOException {
-        List<String> clubs = new ArrayList<>();
+//    public List<String> getClubs() throws IOException {
+//        List<String> clubs = new ArrayList<>();
+//
+//        Document doc = Jsoup.connect(URL_CLUBS).get();
+//
+//        Elements clubElements = doc.select("p.has-nebotheme-content-color.has-text-color a");
+//
+//        for (Element element : clubElements) {
+//            String clubName = element.text();
+//            String clubLink = element.attr("href");
+//            clubs.add(clubName + " - " + clubLink);
+//        }
+//
+//        return clubs;
+//    }
+
+
+    public List<Clubs> getClubs() throws IOException {
+        List<Clubs> clubs = new ArrayList<>();
 
         Document doc = Jsoup.connect(URL_CLUBS).get();
-
         Elements clubElements = doc.select("p.has-nebotheme-content-color.has-text-color a");
 
         for (Element element : clubElements) {
             String clubName = element.text();
-            String clubLink = element.attr("href");
-            clubs.add(clubName + " - " + clubLink);
+            String cleanName = clubName.replaceFirst("^\\d+/", "").trim();            String clubLink = element.attr("href");
+            clubs.add(new Clubs(clubName));
         }
 
         return clubs;
     }
-
 
     public String scrapeCalendrierInternational() {
         try {

@@ -2,6 +2,7 @@ package main.natationtn.Entities;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 public class ContenuPresse {
 
     @Id
@@ -31,13 +33,6 @@ public class ContenuPresse {
     // Constructeurs
     public ContenuPresse() {}
 
-    public ContenuPresse(String titre, TypePresse type, String contenu, LocalDate datePublication/*, StatutPublication statutPublication*/) {
-        this.titre = titre;
-        this.type = type;
-        this.contenu = contenu;
-        this.datePublication = datePublication;
-       // this.statutPublication = statutPublication;
-    }
 
 }
 
