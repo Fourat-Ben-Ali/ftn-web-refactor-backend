@@ -1,7 +1,8 @@
 package main.natationtn.Services;
 
 import main.natationtn.Entities.ContenuPresse;
-import main.natationtn.Repository.CpRepository;
+
+import main.natationtn.Repositories.CpRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
