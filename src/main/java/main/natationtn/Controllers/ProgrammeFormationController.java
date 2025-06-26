@@ -65,6 +65,12 @@ public class ProgrammeFormationController {
         return new ResponseEntity<>(programmes, HttpStatus.OK);
     }
 
+    @GetMapping("/statuts")
+    public ResponseEntity<StatutPublication[]> getAllStatuses() {
+        StatutPublication[] statuses = StatutPublication.values();
+        return new ResponseEntity<>(statuses, HttpStatus.OK);
+    }
+
     // Update
     @PutMapping("/{id}")
     public ResponseEntity<ProgrammeFormation> updateProgrammeFormation(
