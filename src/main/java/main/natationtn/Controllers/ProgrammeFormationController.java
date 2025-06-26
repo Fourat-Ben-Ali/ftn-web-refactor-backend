@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/programme-formations")
@@ -65,6 +66,11 @@ public class ProgrammeFormationController {
         return new ResponseEntity<>(programmes, HttpStatus.OK);
     }
 
+    @GetMapping("/statuts")
+    public ResponseEntity<StatutPublication[]> getAllStatuts() {
+        return new ResponseEntity<>(StatutPublication.values(), HttpStatus.OK);
+    }
+
     // Update
     @PutMapping("/{id}")
     public ResponseEntity<ProgrammeFormation> updateProgrammeFormation(
@@ -81,8 +87,12 @@ public class ProgrammeFormationController {
     @PutMapping("/{id}/statut")
     public ResponseEntity<ProgrammeFormation> updateStatutPublication(
             @PathVariable Long id,
-            @RequestBody StatutPublication statutPublication) {
+            @RequestBody Map<String, StatutPublication> request) {
         try {
+            StatutPublication statutPublication = request.get("statutPublication");
+            if (statutPublication == null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
             ProgrammeFormation updatedProgramme = programmeFormationService.updateStatutPublication(id, statutPublication);
             return new ResponseEntity<>(updatedProgramme, HttpStatus.OK);
         } catch (Exception e) {
