@@ -5,6 +5,7 @@ import main.natationtn.DTO.AuthenticationRequest;
 import main.natationtn.DTO.AuthenticationResponse;
 import main.natationtn.DTO.RegisterRequest;
 import main.natationtn.Entities.User;
+import main.natationtn.Entities.UserRoles;
 import main.natationtn.Repositories.UserRepository;
 import main.natationtn.config.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,14 +29,16 @@ public class AuthenticationService {
                 .email ( request.getEmail ( ) )
                 .password ( passwordEncoder.encode ( request.getPassword ( ) ) )
                 .phoneNumber ( request.getPhoneNumber ( ) )
-                .role ( request.getUserRoles ( ) )
+                .role ( request.getUserRoles ( ) != null ? request.getUserRoles ( ) : UserRoles.USER )
                 .build ( );
 
         this.userRepository.save ( user );
         String jwtToken = jwtService.generateToken ( user );
-        return AuthenticationResponse.builder ( ).token ( jwtToken ).build ( );
-
-
+        return AuthenticationResponse.builder ( )
+                .token ( jwtToken )
+                .firstName ( user.getFirstName ( ) )
+                .lastName ( user.getLastName ( ) )
+                .build ( );
     }
 
     public AuthenticationResponse authenticate ( AuthenticationRequest request ) {
@@ -44,11 +47,13 @@ public class AuthenticationService {
                         request.getEmail ( ) ,
                         request.getPassword ( )
                 )
-
         );
         var user = userRepository.findByEmail ( request.getEmail ( ) ).orElseThrow ( );
         String jwtToken = jwtService.generateToken ( user );
-        return AuthenticationResponse.builder ( ).token ( jwtToken ).firstName ( user.getFirstName ( ) ) .lastName ( user.getLastName ( ) ) . build ( );
-
+        return AuthenticationResponse.builder ( )
+                .token ( jwtToken )
+                .firstName ( user.getFirstName ( ) )
+                .lastName ( user.getLastName ( ) )
+                .build ( );
     }
 }

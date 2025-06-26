@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-//hello
+
 @Entity
 @Getter
 @Setter
@@ -24,9 +24,9 @@ public class Evenement {
     @Enumerated(EnumType.STRING)
     private TypeEvenement typeEvenement;
 
-   @ManyToOne
-   @JoinColumn(name = "discipline_id")
-   private Discipline discipline;
+    @ManyToOne
+    @JoinColumn(name = "discipline_id")
+    private Discipline discipline;
 
     public void setId(Long id) {
         this.id = id;
