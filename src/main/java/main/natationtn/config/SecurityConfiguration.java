@@ -43,7 +43,16 @@ public class SecurityConfiguration {
                                 "/api/scrape-all",
                                 "/api/scrape-blogs",
                                 "/api/athletes/**",
-                                "/api/clubs/**"
+                                "/api/clubs/**",
+                                "/api/programme-formations/**",
+                                "/api/actualite-academies/**",
+                                "/api/evenements/**",
+                                "/api/disciplines/**",
+                                "/api/licences/**",
+                                "/api/equipes-nationales/**",
+                                "/api/pools/**",
+                                "/api/pool-reservations/**",
+                                "/api/contenus/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
