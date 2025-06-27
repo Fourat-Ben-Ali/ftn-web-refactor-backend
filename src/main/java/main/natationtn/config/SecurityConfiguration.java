@@ -14,6 +14,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 import java.util.List;
 
@@ -60,6 +64,23 @@ public class SecurityConfiguration {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
+    }
+
+    @Bean
+    public FilterRegistrationBean<Filter> cspHeaderDisabler() {
+        FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new Filter() {
+            @Override
+            public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+                if (response instanceof HttpServletResponse resp) {
+                    resp.setHeader("Content-Security-Policy", "");
+                }
+                chain.doFilter(request, response);
+            }
+        });
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.setOrder(0);
+        return registrationBean;
     }
 
 }
