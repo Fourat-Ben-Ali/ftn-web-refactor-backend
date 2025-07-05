@@ -52,7 +52,8 @@ public class SecurityConfiguration {
                                 "/api/equipes-nationales/**",
                                 "/api/pools/**",
                                 "/api/pool-reservations/**",
-                                "/api/contenus/**"
+                                "/api/contenus/**",
+                                "/api/users/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

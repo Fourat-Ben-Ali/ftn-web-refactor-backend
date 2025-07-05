@@ -31,15 +31,19 @@ public class PoolReservation {
     @Column(nullable = false)
     private LocalTime endTime;
 
+    @Column(nullable = false)
+    private Integer lane;
+
     public PoolReservation() {}
 
-    public PoolReservation(String coach, Clubs club, OlympicSwimmingPool pool, LocalDate date, LocalTime startTime, LocalTime endTime) {
+    public PoolReservation(String coach, Clubs club, OlympicSwimmingPool pool, LocalDate date, LocalTime startTime, LocalTime endTime, Integer lane) {
         this.coach = coach;
         this.club = club;
         this.pool = pool;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.lane = lane;
     }
 
     public Long getId() { return id; }
@@ -62,4 +66,7 @@ public class PoolReservation {
 
     public LocalTime getEndTime() { return endTime; }
     public void setEndTime(LocalTime endTime) { this.endTime = endTime; }
+
+    public Integer getLane() { return lane; }
+    public void setLane(Integer lane) { this.lane = lane; }
 } 

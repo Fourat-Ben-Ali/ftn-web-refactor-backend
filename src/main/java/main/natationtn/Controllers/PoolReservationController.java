@@ -28,8 +28,9 @@ public class PoolReservationController {
             @RequestParam(required = false) String coach,
             @RequestParam(required = false) Long clubId,
             @RequestParam(required = false) Long poolId,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        return reservationService.filterReservations(coach, clubId, poolId, date);
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(required = false) Integer lane) {
+        return reservationService.filterReservations(coach, clubId, poolId, date, lane);
     }
 
     @GetMapping("/{id}")
