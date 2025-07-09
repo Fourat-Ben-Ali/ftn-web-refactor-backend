@@ -18,11 +18,28 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.springframework.beans.factory.annotation.Autowired;
+import main.natationtn.Entities.Clubs;
+import main.natationtn.Entities.Athlete;
+import main.natationtn.Entities.EquipeNationale;
+import main.natationtn.Repositories.ClubRepository;
+import main.natationtn.Repositories.AthleteRepository;
+import main.natationtn.Repositories.EquipeNationaleRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RaceScraperService {
 
     private static final Logger logger = LoggerFactory.getLogger(RaceScraperService.class);
+
+    @Autowired
+    private ClubRepository clubRepository;
+
+    @Autowired
+    private AthleteRepository athleteRepository;
+
+    @Autowired
+    private EquipeNationaleRepository equipeNationaleRepository;
 
     private String clean(String text) {
         return text == null ? "" : text.trim().replace("\u00a0", " ");
@@ -124,6 +141,7 @@ public class RaceScraperService {
             }
         }
         logger.info("Scraping completed. Total results: {}", results.size());
+       this.saveRaceResultsToDb ( results );
         return results;
     }
 
@@ -225,5 +243,53 @@ public class RaceScraperService {
             }
         }
         return allResults;
+    }
+
+    @Transactional
+    public void saveRaceResultsToDb(List<RaceResult> results) {
+        for (RaceResult result : results) {
+            // 1. Club
+            System.out.println("start");
+
+            Clubs club = null;
+            if (result.getClub() != null && !result.getClub().isEmpty()) {
+                club = clubRepository.findByClubName(result.getClub())
+                        .orElseGet(() -> {
+                            Clubs newClub = new Clubs();
+                            newClub.setClubName(result.getClub());
+                            return clubRepository.save(newClub);
+                        });
+            }
+
+            // 2. Equipe Nationale (optionnel, selon ta logique)
+            EquipeNationale equipe = null;
+            if (result.getNation() != null && !result.getNation().isEmpty()) {
+                equipe = equipeNationaleRepository.findByNom(result.getNation())
+                        .orElseGet(() -> {
+                            EquipeNationale newEquipe = new EquipeNationale();
+                            newEquipe.setNom(result.getNation());
+                            return equipeNationaleRepository.save(newEquipe);
+                        });
+            }
+
+            // 3. Athlete
+            String[] nameParts = result.getName().split(" ", 2);
+            String prenom = nameParts.length > 1 ? nameParts[0] : "";
+            String nom = nameParts.length > 1 ? nameParts[1] : nameParts[0];
+
+            Athlete athlete = new Athlete();
+            athlete.setPrenom(prenom);
+            athlete.setNom(nom);
+            athlete.setGenre(result.getGender());
+            // Convertir la date de naissance si possible
+            // athlete.setDateNaissance(...);
+            athlete.setNationalite(result.getNation());
+            athlete.setClub(club);
+            athlete.setEquipeNationale(equipe);
+
+            // Vérifier s'il existe déjà (par exemple par nom/prenom/date_naissance)
+            // Sinon, sauvegarder
+            athleteRepository.save(athlete);
+        }
     }
 }

@@ -12,7 +12,6 @@ public class RaceResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     private String startDate;
     private String endDate;
     private String race;

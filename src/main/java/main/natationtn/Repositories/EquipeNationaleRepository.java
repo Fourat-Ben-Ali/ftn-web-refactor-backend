@@ -5,12 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EquipeNationaleRepository extends JpaRepository<EquipeNationale, Long> {
     // Keep the existing method for finding by discipline
     List<EquipeNationale> findByDisciplineId(Long disciplineId);
+    Optional <EquipeNationale> findByNom( String nom);
 
-    // Remove the method findByMembresId as it's no longer a ManyToMany relationship
-    // You would need to use the AthleteRepository to find an athlete's equipe
 }

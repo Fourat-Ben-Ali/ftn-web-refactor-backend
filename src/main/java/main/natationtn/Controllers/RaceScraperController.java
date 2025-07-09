@@ -16,6 +16,7 @@ public class RaceScraperController {
 
     private final RaceScraperService raceScraperService;
 
+
     public RaceScraperController(RaceScraperService raceScraperService) {
         this.raceScraperService = raceScraperService;
     }

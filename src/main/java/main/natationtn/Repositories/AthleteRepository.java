@@ -4,7 +4,9 @@ import main.natationtn.Entities.Athlete;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AthleteRepository extends JpaRepository<Athlete, Long> {
@@ -14,4 +16,6 @@ public interface AthleteRepository extends JpaRepository<Athlete, Long> {
 
     // New method for finding athletes by equipeNationale
     List<Athlete> findByEquipeNationaleId(Long equipeNationaleId);
+    Optional <Athlete> findByPrenomAndNomAndDateNaissance( String prenom, String nom, LocalDate dateNaissance);
+
 }
