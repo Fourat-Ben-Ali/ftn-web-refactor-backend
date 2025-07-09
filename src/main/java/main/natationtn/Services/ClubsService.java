@@ -42,5 +42,13 @@ public class ClubsService {
         return clubRepository.findAll(pageable);
     }
 
-
+    public Clubs saveClub(Clubs club) {
+        return clubRepository.save(club);
+    }
+    public void deleteClub(Long id) {
+        clubRepository.deleteById(id);
+    }
+    public Clubs getClubById(Long id) {
+        return clubRepository.findById(id).orElse(null);
+    }
 }

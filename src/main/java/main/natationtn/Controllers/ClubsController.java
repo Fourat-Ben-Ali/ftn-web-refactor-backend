@@ -28,6 +28,35 @@ public class ClubsController {
         return ResponseEntity.ok("All clubs have been deleted.");
     }
 
+    @PostMapping
+    public ResponseEntity<Clubs> createClub(@RequestBody Clubs club) {
+        Clubs saved = clubsService.saveClub(club);
+        return ResponseEntity.ok(saved);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Clubs> updateClub(@PathVariable Long id, @RequestBody Clubs club) {
+        club.setId(id);
+        Clubs updated = clubsService.saveClub(club);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteClub(@PathVariable Long id) {
+        clubsService.deleteClub(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Clubs> getClubById(@PathVariable Long id) {
+        Clubs club = clubsService.getClubById(id);
+        if (club != null) {
+            return ResponseEntity.ok(club);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<Clubs>> getAllClubs() {
         List<Clubs> clubs = clubsService.getAllClubs();
