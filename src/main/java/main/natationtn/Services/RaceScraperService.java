@@ -281,19 +281,19 @@ public class RaceScraperService {
             String dateString = "01-01-" + year;
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             LocalDate dateNaissance = LocalDate.parse(dateString, formatter);
+            boolean exists = athleteRepository.existsByNomAndPrenomAndDateNaissance (fullName[0], fullName[1],  dateNaissance );
 
             Athlete athlete = new Athlete();
             athlete.setPrenom(fullName[1]);
             athlete.setNom(fullName[0]);
-            athlete.setGenre(result.getGender());
+            athlete.setGenre(this.convertGender(result.getGender()));
              athlete.setDateNaissance(dateNaissance);
             athlete.setNationalite(result.getNation());
             athlete.setClub(club);
             athlete.setEquipeNationale(equipe);
 
-            // Vérifier s'il existe déjà (par exemple par nom/prenom/date_naissance)
-            // Sinon, sauvegarder
-            athleteRepository.save(athlete);
+            if(!exists){
+            athleteRepository.save(athlete);}
         }
     }
 
@@ -312,11 +312,27 @@ public class RaceScraperService {
                 if (nom.length() > 0) nom.append(" ");
                 nom.append(part);
             } else {
-                // Premier mot non tout en majuscule = prénom (et tout ce qui suit)
                 prenom = String.join(" ", Arrays.copyOfRange(parts, i, parts.length));
                 break;
             }
         }
         return new String[]{nom.toString(), prenom};
     }
+
+    public static String convertGender(String gender) {
+        if (gender == null) {
+            return "Unknown";
+        }
+        switch (gender.trim().toLowerCase()) {
+            case "dames":
+            case "femmes":
+                return "Female";
+            case "messieurs":
+            case "hommes":
+                return "Male";
+            default:
+                return "Unknown";
+        }
+    }
+
 }
