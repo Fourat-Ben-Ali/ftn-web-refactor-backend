@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -273,16 +275,18 @@ public class RaceScraperService {
             }
 
             // 3. Athlete
-            String[] nameParts = result.getName().split(" ", 2);
-            String prenom = nameParts.length > 1 ? nameParts[0] : "";
-            String nom = nameParts.length > 1 ? nameParts[1] : nameParts[0];
+
+            String [] fullName  = this.splitNomPrenom ( result.getName ( ) );
+            String year = result.getBirth();
+            String dateString = "01-01-" + year;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate dateNaissance = LocalDate.parse(dateString, formatter);
 
             Athlete athlete = new Athlete();
-            athlete.setPrenom(prenom);
-            athlete.setNom(nom);
+            athlete.setPrenom(fullName[1]);
+            athlete.setNom(fullName[0]);
             athlete.setGenre(result.getGender());
-            // Convertir la date de naissance si possible
-            // athlete.setDateNaissance(...);
+             athlete.setDateNaissance(dateNaissance);
             athlete.setNationalite(result.getNation());
             athlete.setClub(club);
             athlete.setEquipeNationale(equipe);
@@ -291,5 +295,28 @@ public class RaceScraperService {
             // Sinon, sauvegarder
             athleteRepository.save(athlete);
         }
+    }
+
+    public static String[] splitNomPrenom(String fullName) {
+        if (fullName == null || fullName.isEmpty()) {
+            return new String[]{"", ""};
+        }
+        String[] parts = fullName.trim().split("\\s+");
+        StringBuilder nom = new StringBuilder();
+        String prenom = "";
+
+        for (int i = 0; i < parts.length; i++) {
+            String part = parts[i];
+            if (part.equals(part.toUpperCase())) {
+                // Mot tout en majuscule = nom
+                if (nom.length() > 0) nom.append(" ");
+                nom.append(part);
+            } else {
+                // Premier mot non tout en majuscule = prénom (et tout ce qui suit)
+                prenom = String.join(" ", Arrays.copyOfRange(parts, i, parts.length));
+                break;
+            }
+        }
+        return new String[]{nom.toString(), prenom};
     }
 }
