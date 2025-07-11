@@ -9,6 +9,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "contenu_presse")
 @Getter
 @Setter
 @AllArgsConstructor

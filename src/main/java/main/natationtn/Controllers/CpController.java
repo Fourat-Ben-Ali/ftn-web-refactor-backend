@@ -18,14 +18,17 @@ public class CpController {
     // CREATE
     @PostMapping("/add")
     public ResponseEntity<ContenuPresse> addContenu(@RequestBody ContenuPresse cp) {
+        System.out.println("DEBUG - Contenu reçu: " + cp);
         ContenuPresse saved = cpService.ADDContenu(cp);
         return ResponseEntity.ok(saved);
     }
 
     // READ - All
     @GetMapping("/ListContenu")
-    public ResponseEntity<List<ContenuPresse>> getAllContenus() {
-        return ResponseEntity.ok(cpService.getAllContenus());
+    public List<ContenuPresse> getAllContenus() {
+    
+        List<ContenuPresse> contenus = cpService.getAllContenus();
+        return contenus;
     }
 
     // READ - By ID

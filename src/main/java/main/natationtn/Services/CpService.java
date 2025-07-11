@@ -21,7 +21,9 @@ public class CpService {
 
 
     public List<ContenuPresse> getAllContenus() {
-        return cpRepository.findAll();
+        List<ContenuPresse> result = cpRepository.findAll();
+
+        return result;
     }
 
 
